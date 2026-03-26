@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Etiqueta ALTEA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    .etiqueta {
+      background: white;
+      width: 54mm;
+      padding: 3mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2mm;
+      border: 1px dashed #ccc;
+    }
+
+    .logo {
+      font-size: 11px;
+      font-family: 'Libre Baskerville', serif;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-align: center;
+      color: #000;
+    }
+
+    .separador {
+      width: 100%;
+      border-top: 0.5px solid #000;
+    }
+
+    .qr-img {
+      width: 44mm;
+      height: 44mm;
+    }
+
+    .orden-label {
+      font-size: 8px;
+      color: #555;
+      text-align: center;
+    }
+
+    .orden-valor {
+      font-size: 13px;
+      font-weight: bold;
+      text-align: center;
+      color: #000;
+    }
+
+    /* Botón de imprimir — no aparece al imprimir */
+    .btn-imprimir {
+      margin-top: 10mm;
+      padding: 10px 24px;
+      background: #1a1a2e;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .btn-imprimir:hover {
+      background: #333;
+    }
+
+    /* CSS de impresión — aquí está la magia para 58mm */
+    @media print {
+      @page {
+        size: 58mm auto;
+        margin: 0;
+      }
+
+      body {
+        background: white;
+        display: block;
+      }
+
+      .etiqueta {
+        border: none;
+        width: 54mm;
+        margin: 2mm auto;
+      }
+
+      .btn-imprimir {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="etiqueta">
+    <div class="logo">ALTEA</div>
+    <div class="separador"></div>
+    <img class="qr-img" id="qr-img" src="" alt="QR">
+    <div class="separador"></div>
+    <div class="orden-label">N° Orden Joyería</div>
+    <div class="orden-valor" id="orden-valor">—</div>
+  </div>
+
+  <button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir</button>
+
+  <script>
+    // Lee los parámetros de la URL
+    const params = new URLSearchParams(window.location.search);
+    const qr = params.get('qr') || '';
+    const orden = params.get('orden') || 'Sin orden';
+
+    // Genera la imagen del QR usando el ID
+    if (qr) {
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qr)}`;
+      document.getElementById('qr-img').src = qrUrl;
+    }
+
+    // Muestra el N° de orden
+    document.getElementById('orden-valor').textContent = orden;
+  </script>
+
+</body>
+</html>
